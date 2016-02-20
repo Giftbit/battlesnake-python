@@ -1,5 +1,8 @@
 import bottle
 import os
+from Game import Game
+from Coordinate import Coordinate
+from Snake import Snake
 
 
 @bottle.route('/static/<path:path>')
@@ -33,13 +36,23 @@ def start():
 
 @bottle.post('/move')
 def move():
+
     data = bottle.request.json
 
+    food = [Coordinate(coord[0], coord[1]) for coord in data['food']]
+    snakes = [Snake(snakeParams) for snakeParams in data['snakes']]
+    game = Game(data['width'], data['height'], food, snakes)
+    for item in food:
+        print item
+    print food
+    print snakes
+    print game
     # TODO: Do things with data
 
     return {
         'move': 'north',
-        'taunt': 'battlesnake-python!'
+        'taunt': 'battlesnake-python!',
+        # 'game': data.food
     }
 
 
