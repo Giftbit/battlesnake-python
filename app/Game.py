@@ -1,4 +1,5 @@
 from Snake import Snake
+from Coordinate import Coordinate
 
 
 
@@ -28,32 +29,39 @@ class Game(object):
         self.populateSnakes()
         self.populateFood()
 
-        self.findMySnake()
+        self.mySnake = self.findMySnake()
+
+        print self.mySnake
+        print self.mySnake.coords[0]
+        print "end init"
 
     def findDirection(self):
-        [direction for direction in DirectionEnum.DIRECTIONS if self.isPassableDirection(direction)][0]
+        print ", ".join( [direction for direction in DirectionEnum.DIRECTIONS if self.isPassableDirection(direction)] )
+
+        return [direction for direction in DirectionEnum.DIRECTIONS if self.isPassableDirection(direction)][0]
 
     def isPassableDirection(self,direction):
+        print "Passable" + direction + "?"
         return self.isPassableCoordinate( DirectionEnum.coordinate(direction, self.mySnake.coords[0] ) ) 
     
 
     def isValidCoordinate(self,coord):
         if (coord.x < 0 or coord.x >= self.width):
-            return false
-        if (cord.y < 0 or coord.y >= self.height):
-            return false
-        return true
+            return False
+        if (coord.y < 0 or coord.y >= self.height):
+            return False
+        return True
 
     def isPassableCoordinate(self,coord):
-        if not self.isValidCoordinate(coord):
-            return false
+        if not self.isValidCoordinate(coord): 
+            return False
         if self.board[coord.x][coord.y] != BoardType.SNAKE:
-            return true
-        return false
+            return True
+        return False
 
 
     def findMySnake(self):
-        [ snake for snake in self.snakes if snake.id == Game.snakeID ][0]
+        return [ snake for snake in self.snakes if snake.id == Game.snakeID ][0]
 
     def populateSnakes(self):
 
@@ -87,10 +95,10 @@ class DirectionEnum(object):
         if ( direction == DirectionEnum.NORTH ) :
             return Coordinate(coordinate.x,coordinate.y-1)
         elif ( direction == DirectionEnum.SOUTH ) :
-            Coordinate(coordinate.x,coordinate.y+1)
+            return Coordinate(coordinate.x,coordinate.y+1)
         elif ( direction == DirectionEnum.EAST ) :
-            Coordinate(coordinate.x+1,coordinate.y)
+            return Coordinate(coordinate.x+1,coordinate.y)
         elif ( direction == DirectionEnum.WEST ) :
-            Coordinate(coordinate.x-1,coordinate.y)
+            return Coordinate(coordinate.x-1,coordinate.y)
         
 

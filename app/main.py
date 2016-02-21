@@ -50,8 +50,10 @@ def move():
     print game
     # TODO: Do things with data
 
+
+
     return {
-        'move': 'north',
+        'move': game.findDirection(),
         'taunt': 'battlesnake-python!',
         # 'game': data.food
     }
