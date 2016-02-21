@@ -38,6 +38,7 @@ def start():
 def move():
 
     data = bottle.request.json
+    print data
 
     food = [Coordinate(coord[0], coord[1]) for coord in data['food']]
     snakes = [Snake(snakeParams) for snakeParams in data['snakes']]
