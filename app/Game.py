@@ -36,13 +36,50 @@ class Game(object):
         print "end init"
 
     def findDirection(self):
-        print ", ".join( [direction for direction in DirectionEnum.DIRECTIONS if self.isPassableDirection(direction)] )
 
-        return [direction for direction in DirectionEnum.DIRECTIONS if self.isPassableDirection(direction)][0]
+        firstNode = Node()
 
-    def isPassableDirection(self,direction):
-        print "Passable" + direction + "?"
-        return self.isPassableCoordinate( DirectionEnum.coordinate(direction, self.mySnake.coords[0] ) ) 
+        longestPath = 1
+        longestDirection = "north"
+
+        stack = []
+
+        for direction in [direction for direction in DirectionEnum.DIRECTIONS if self.isPassableDirection(direction, self.mySnake.coords[0])]:
+            node = Node()
+            node.coord = DirectionEnum.coordinate(direction, self.mySnake.coords[0] )
+            node.direction = direction
+            node.length = 1
+            stack.append(node)
+
+        while ( len(stack) > 0  and longestPath < len(self.mySnake.coords)):
+            aNode = stack.pop() 
+
+            self.setSquare(aNode.x, aNode.y, BoardType.SNAKE)
+
+            if ( longestPath > node.length):
+                longestDirection = node.direction
+                longestPath = node.length
+
+            for direction in [direction for direction in DirectionEnum.DIRECTIONS if self.isPassableDirection(direction, aNode.coord)]:
+                newNode = Node()
+                newNode.coord = DirectionEnum.coordinate(direction, aNode.coord )
+                newNode.direction = direction
+                newNode.length = aNode.length + 1
+                stack.append(newNode)
+
+
+        return longestDirection
+
+
+
+        
+
+
+    def getAllPassible(self):
+        return [direction for direction in DirectionEnum.DIRECTIONS if self.isPassableDirection(direction)]
+
+    def isPassableDirection(self,direction, coord):
+        return self.isPassableCoordinate( DirectionEnum.coordinate(direction, coord ) ) 
     
 
     def isValidCoordinate(self,coord):
@@ -76,6 +113,10 @@ class Game(object):
 
     def setSquare(self, x, y, type):
         self.board[x][y] = type
+
+class Node(object):
+    coord = None
+
 
 class BoardType(object):
     EMPTY = "EMPTY"
